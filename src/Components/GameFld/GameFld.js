@@ -6,7 +6,12 @@ export default class GameFld extends Component{
             <div id='game-fld' className="col-7 border">
                 {
                     this.props.elements.map((row, index)=>{
-                        return <Row row={row} key={"row-"+index} getPlayerColor={this.props.getPlayerColor}/>
+                        return <Row key={"row-"+index}
+                                    row={row}
+                                    rowIndex={index}
+                                    getPlayerColor={this.props.getPlayerColor}
+                                    handlePlayerTurn = {this.props.handlePlayerTurn}
+                                />
                     })
                 }
             </div>

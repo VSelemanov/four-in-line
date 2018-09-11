@@ -6,6 +6,7 @@ export default class Cell extends Component{
             <div
                 className="col game-fld-cell border"
                 style={{backgroundColor: this.props.getPlayerColor(this.props.cell.player)}}
+                onClick={ () => {this.props.handlePlayerTurn(this.props.rowIndex, this.props.colIndex)}}
             > </div>
         )
     }
