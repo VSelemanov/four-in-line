@@ -21,4 +21,8 @@
 }
 .game-fld-cell{
   height: 50px;
+  cursor: pointer;
+}
+.player-card{
+  border:5px solid #dee2e6;
 }

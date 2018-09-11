@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import GameFld from "./GameFld/GameFld";
 import PlayerCard from "./PlayerCard";
-import NewPlayer from "./NewPlayer";
-
 
 export default class Game extends Component {
     constructor(props) {
@@ -12,11 +10,11 @@ export default class Game extends Component {
     }
 
     render () {
+
+        let status = this.handleStatusOfGame() && <button className="btn btn-primary" onClick={this.newGame}>New Game</button>;
+
         return(
             <div id="game">
-                {this.state.isStartGame && false && <NewPlayer
-                    handleSubmitNewPlayer = {this.handleSubmitNewPlayer}
-                />}
                 <h2>Four In Line</h2>
                 <div className="row">
                     <PlayerCard
@@ -33,6 +31,13 @@ export default class Game extends Component {
                         player = {this.state.players[1]}
                         turn = {this.state.turn === 1}
                     />
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <h3>
+                            {status}
+                        </h3>
+                    </div>
                 </div>
             </div>
         )
@@ -65,19 +70,24 @@ export default class Game extends Component {
         ];
         // start game property
         obj.isStartGame = true;
+        // full flag
+        obj.isFull = false;
 
         return obj;
+    };
+    //
+    getPlayerColor = (playerIndex) => {
+        return this.state.players[playerIndex] !== undefined ? this.state.players[playerIndex].color : '';
     };
 
     handleSubmitNewPlayer = (newPlayer) => {
         console.log(newPlayer);
     };
-
-    getPlayerColor = (playerIndex) => {
-        return this.state.players[playerIndex] !== undefined ? this.state.players[playerIndex].color : '';
-    };
-
+    //
     handlePlayerTurn = (row, col) => {
+        if(this.handleEndOfGame()){
+            return;
+        }
         let elements = this.state.GameFldElements;
         let completeFlag = false;
         for (let i = this.state.rows - 1; i >= 0; --i){
@@ -91,20 +101,67 @@ export default class Game extends Component {
             GameFldElements:elements
         });
 
-
-
         if(completeFlag){
+            this.calculateEmptyFlds();
+            this.calculateWinner();
             this.changeTurn();
         }
         else{
             alert("Invalid turn. The column is full. Please, change other column");
         }
     };
-
+    //
+    calculateWinner = () => {
+      for(let i = 0; i < this.state.rows; i++){
+          for(let j = 0; j < this.state.cols; j++){
+             // console.log(this.state.GameFldElements[i][j]);
+          }
+      }
+    };
+    //
     changeTurn = () => {
+        if(this.state.winner === ""){
+            this.setState({
+                turn: +!this.state.turn
+            });
+        }
+    };
+    //
+    calculateEmptyFlds = () => {
+        let count = 0;
+        for(let i = 0; i < this.state.rows; i++){
+            for(let j = 0; j < this.state.cols; j++){
+                if(this.state.GameFldElements[i][j].player === ""){
+                    count++;
+                }
+            }
+        }
         this.setState({
-            turn: +!this.state.turn
+           isFull:  count === 0
         });
     };
-
+    //
+    handleEndOfGame = () => {
+        return this.state.isFull || this.state.winner !== "";
+    };
+    // Status of Game
+    handleStatusOfGame = () => {
+        if(this.handleEndOfGame()){
+            if(this.state.winner !== ""){
+                return this.state.players[this.state.winner].name + ' WINS';
+            }
+            else{
+                return "Draw";
+            }
+        }
+        else{
+            return this.state.players[this.state.turn].name + ' turn';
+        }
+    };
+    // Reset Game
+    newGame = () => {
+         this.setState(
+             this.initState()
+         );
+    }
 }
