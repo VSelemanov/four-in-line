@@ -2,27 +2,23 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.pop-up{
+  background-color: rgba(255, 255, 255, 0.8);
+  top:0;
+  left:0;
+  z-index: 1000;
+  width:100%;
+  height:100%;
+  padding:15% 25%;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.pop-up form{
+  background-color: #fff;
 }
-
-.App-title {
-  font-size: 1.5em;
+.demo-color{
+  width:100%;
+  height: 30px;
 }
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.game-fld-cell{
+  height: 50px;
 }
