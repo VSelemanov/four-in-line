@@ -22,6 +22,7 @@ export default class Game extends Component {
                             player = {this.state.players[0]}
                             turn = {this.state.turn === 0}
                             handleSubmitNewPlayer = {this.handleSubmitNewPlayer}
+                            checkColor = {this.checkColor}
                         />
                     </div>
                     <div className="col-7">
@@ -36,6 +37,7 @@ export default class Game extends Component {
                             player = {this.state.players[1]}
                             turn = {this.state.turn === 1}
                             handleSubmitNewPlayer = {this.handleSubmitNewPlayer}
+                            checkColor = {this.checkColor}
                         />
                     </div>
                 </div>
@@ -212,6 +214,10 @@ export default class Game extends Component {
         else{
             return this.state.players[this.state.turn].name + ' turn';
         }
+    };
+    checkColor = (color, playerId) => {
+        let player = this.state.players.find(player => player.color === color);
+        return player === undefined || player.id === playerId
     };
     // Reset Game
     newGame = () => {

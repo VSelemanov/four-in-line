@@ -46,7 +46,12 @@ export default class NewPlayer extends Component {
         else{
             let newPlayer = this.state;
             newPlayer.isReady = true;
-            this.props.handleSubmitNewPlayer(newPlayer);
+            if(this.props.checkColor(newPlayer.color, newPlayer.id)){
+                this.props.handleSubmitNewPlayer(newPlayer);
+            }
+            else{
+                alert("Selected color has already chosen by other player. Please, select other color.");
+            }
         }
     };
 }

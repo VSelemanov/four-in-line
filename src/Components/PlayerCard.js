@@ -7,6 +7,7 @@ export default class PlayerCard extends Component {
         let form = !this.props.player.isReady && (<NewPlayer
                                                     player = {this.props.player}
                                                     handleSubmitNewPlayer = {this.props.handleSubmitNewPlayer}
+                                                    checkColor = {this.props.checkColor}
                                                  />);
         let card = this.props.player.isReady
                && (<div className={"player-card " + style}>
