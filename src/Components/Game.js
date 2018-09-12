@@ -215,6 +215,7 @@ export default class Game extends Component {
             return this.state.players[this.state.turn].name + ' turn';
         }
     };
+    // check selected colors
     checkColor = (color, playerId) => {
         let player = this.state.players.find(player => player.color === color);
         return player === undefined || player.id === playerId
