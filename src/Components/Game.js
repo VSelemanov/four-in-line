@@ -10,8 +10,8 @@ export default class Game extends Component {
     }
 
     render () {
-
-        let status = this.handleStatusOfGame() && <button className="btn btn-primary" onClick={this.newGame}>New Game</button>;
+        let status = this.handleStatusOfGame();
+        let reset = this.handleEndOfGame() && <button className="btn btn-primary" onClick={this.newGame}>New Game</button>;
 
         return(
             <div id="game">
@@ -37,6 +37,7 @@ export default class Game extends Component {
                         <h3>
                             {status}
                         </h3>
+                        {reset}
                     </div>
                 </div>
             </div>
@@ -112,11 +113,47 @@ export default class Game extends Component {
     };
     //
     calculateWinner = () => {
-      for(let i = 0; i < this.state.rows; i++){
-          for(let j = 0; j < this.state.cols; j++){
-             // console.log(this.state.GameFldElements[i][j]);
-          }
-      }
+        for(let i = 0; i < this.state.rows; i++){
+            for(let j = 0; j < this.state.cols; j++){
+                let player = this.state.GameFldElements[i][j].player;
+                if(player === "")
+                    continue;
+                // straight
+                this.checkCell(player, i, j, -3, 0); // up
+                this.checkCell(player, i, j, 3, 0); // down
+                this.checkCell(player, i, j, 0, -3); // left
+                this.checkCell(player, i, j, 0, 3); // right
+                // diagonal
+                this.checkCell(player, i, j, -3, -3); // up left
+                this.checkCell(player, i, j, 3, -3); // down left
+                this.checkCell(player, i, j, -3, 3); // up right
+                this.checkCell(player, i, j, 3, 3); // down right
+            }
+        }
+    };
+    //
+    checkCell = (player, row, col, difRow, difCol) => {
+        let count = 0; // because first cell is "ready"
+        let stepR = difRow/3; // calculate row step
+        let stepC = difCol/3; // calculate col step
+
+        for(let i = 0; i <=3; i++){
+            let r = row+stepR*i;
+            let c = col+stepC*i;
+            // control size of Game Fld
+            if(r < 0 || r > (this.state.rows - 1)) continue;
+            if(c < 0 || c > (this.state.cols - 1)) continue;
+
+            if(this.state.GameFldElements[row+stepR*i][col+stepC*i].player === player){
+                count++;
+            }
+        }
+
+        if(count === 4){
+            this.setState({
+               winner:player
+            });
+        }
     };
     //
     changeTurn = () => {
