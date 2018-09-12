@@ -3,7 +3,7 @@ import Row from "./Row";
 export default class GameFld extends Component{
     render() {
         return(
-            <div id='game-fld' className="col-7 border">
+            <div id='game-fld'>
                 {
                     this.props.elements.map((row, index)=>{
                         return <Row key={"row-"+index}

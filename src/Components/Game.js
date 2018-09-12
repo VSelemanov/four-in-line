@@ -17,20 +17,27 @@ export default class Game extends Component {
             <div id="game">
                 <h2>Four In Line</h2>
                 <div className="row">
-                    <PlayerCard
-                        player = {this.state.players[0]}
-                        turn = {this.state.turn === 0}
-                    />
-                    <GameFld
-                        getPlayerColor={this.getPlayerColor}
-                        elements = {this.state.GameFldElements}
-                        handlePlayerTurn = {this.handlePlayerTurn}
-
-                    />
-                    <PlayerCard
-                        player = {this.state.players[1]}
-                        turn = {this.state.turn === 1}
-                    />
+                    <div className="col border">
+                        <PlayerCard
+                            player = {this.state.players[0]}
+                            turn = {this.state.turn === 0}
+                            handleSubmitNewPlayer = {this.handleSubmitNewPlayer}
+                        />
+                    </div>
+                    <div className="col-7">
+                        <GameFld
+                            getPlayerColor={this.getPlayerColor}
+                            elements = {this.state.GameFldElements}
+                            handlePlayerTurn = {this.handlePlayerTurn}
+                        />
+                    </div>
+                    <div className="col border">
+                        <PlayerCard
+                            player = {this.state.players[1]}
+                            turn = {this.state.turn === 1}
+                            handleSubmitNewPlayer = {this.handleSubmitNewPlayer}
+                        />
+                    </div>
                 </div>
                 <div className="row">
                     <div className="col">
@@ -66,8 +73,8 @@ export default class Game extends Component {
         obj.winner = "";
         // default players
         obj.players = [
-            {name: "Player 1", color:"#ff0000"},
-            {name: "Player 2", color:"#0000ff"}
+            {id: 1, name: "Player 1", color:"#ff0000", isReady: false},
+            {id: 2, name: "Player 2", color:"#0000ff", isReady: false}
         ];
         // start game property
         obj.isStartGame = true;
@@ -82,11 +89,16 @@ export default class Game extends Component {
     };
 
     handleSubmitNewPlayer = (newPlayer) => {
-        console.log(newPlayer);
+        let players = this.state.players;
+        let index = players.findIndex(player => player.id === newPlayer.id);
+        players[index] = newPlayer;
+        this.setState({
+            players: players
+        });
     };
     //
     handlePlayerTurn = (row, col) => {
-        if(this.handleEndOfGame()){
+        if(this.handleEndOfGame() || this.handleReadinessPlayers()){
             return;
         }
         let elements = this.state.GameFldElements;
@@ -181,8 +193,14 @@ export default class Game extends Component {
     handleEndOfGame = () => {
         return this.state.isFull || this.state.winner !== "";
     };
+    handleReadinessPlayers = () => {
+        return !this.state.players[0].isReady || !this.state.players[1].isReady;
+    };
     // Status of Game
     handleStatusOfGame = () => {
+        if(this.handleReadinessPlayers()){
+            return "Waiting players...";
+        }
         if(this.handleEndOfGame()){
             if(this.state.winner !== ""){
                 return this.state.players[this.state.winner].name + ' WINS';

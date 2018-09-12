@@ -4,10 +4,7 @@ export default class NewPlayer extends Component {
     constructor (props){
         super(props);
 
-        this.state = {
-            color: "",
-            name: ""
-        };
+        this.state = this.props.player;
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -15,7 +12,7 @@ export default class NewPlayer extends Component {
     render () {
         return (
             <div className="new-player position-absolute pop-up">
-                <h3>New Player</h3>
+                <h4>New Player</h4>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group row">
                         <div className="form-row">
@@ -43,11 +40,13 @@ export default class NewPlayer extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        if(this.state.name === ""){
-            alert("Player name is empty. You should input some value");
+        if(this.state.name === "" || this.state.color === "#ffffff"){
+            alert("Player name is empty or selected color is white. Please, try again.");
         }
         else{
-            this.props.handleSubmitNewPlayer(this.state);
+            let newPlayer = this.state;
+            newPlayer.isReady = true;
+            this.props.handleSubmitNewPlayer(newPlayer);
         }
     };
 }
